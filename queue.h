@@ -15,12 +15,6 @@ class Queue: public Object {
 
 	// constructor queue that takes in a max capacity
 	Queue(unsigned int _capacity) {
-	   this->capacity = _capacity;
-	   this->front = 0;
-	   this->back = 0;
-	   this->size = 0;
-       Object *arr[this->capacity];
-	   this->data = arr;
 	}
 	
 	// checks if queue has 0 elements
@@ -54,9 +48,6 @@ class Queue: public Object {
 	}
    
 	~Queue() {
-           for(int i = 0; i < this->getSize(); i++) {
-                delete this->data[i];
-           }
-           delete this->data;
+         
         }
 };
