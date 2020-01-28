@@ -7,14 +7,9 @@
 class Queue: public Object {
    public:
 	
-	unsigned int back; // most recent element added to queue
-	unsigned int front; // front of the queue/first element
-	size_t size; // size of queue
-	size_t capacity; // max size of queue
-	Object** data; // array of objects representing elements of queue
 
 	// constructor queue that takes in a max capacity
-	Queue(unsigned int _capacity) {
+	Queue() {
 	}
 	
 	// checks if queue has 0 elements
