@@ -41,7 +41,7 @@ class Queue: public Object {
 	
 
        //compare hashes to see if Queues are the same
-        virtual bool equals(Queue* queue) {}
+        virtual bool equals(Object* queue) {}
    
 	virtual ~Queue() {
          
