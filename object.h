@@ -4,8 +4,7 @@
 class Object {
     public:
 
-        //set the hash for the object
-        virtual hash() {}
+        //get the hash for the object
         virtual size_t hash() {}
 
         //object constructor with no arguments
