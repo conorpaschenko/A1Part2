@@ -8,7 +8,7 @@ class Object {
         virtual size_t hash() {}
 
         //object constructor with no arguments
-        Object() {  }
+        Object() { }
 
        //compare hashes to see if objects are the same
         virtual bool equals(Object* object) {}
