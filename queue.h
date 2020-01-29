@@ -12,31 +12,31 @@ class Queue: public Object {
 	}
 	
 	// checks if queue has 0 elements
-	bool queue_empty() {
+	virtual bool queue_empty() {
 	 
 	}
 
 	// returns front element of queue
-	Object* frontElement() {
+	virtual Object* frontElement() {
 	
 	}
 	
 	// returns queue size
-	size_t getSize() {
+	virtual size_t getSize() {
 	   
 	}
 	
 	// adds element to back of queue if queue is not full. Increments back. 
-	void queue_push(Object* element) {
+	virtual void queue_push(Object* element) {
 	  
 	}
 	
-	// removes front element of queue. Shifts remaining elements down a spot	
-	Object* queue_pop() {
+	// removes front element of queue. Shifts remaining elements down a spot and returns popped element	
+	virtual Object* queue_pop() {
 	 
 	}
    
-	~Queue() {
+	virtual ~Queue() {
          
         }
 };
