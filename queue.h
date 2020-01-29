@@ -35,6 +35,13 @@ class Queue: public Object {
 	virtual Object* queue_pop() {
 	 
 	}
+	
+	//get the hash for the Queue
+        virtual size_t hash() {}
+	
+
+       //compare hashes to see if Queues are the same
+        virtual bool equals(Queue* queue) {}
    
 	virtual ~Queue() {
          
