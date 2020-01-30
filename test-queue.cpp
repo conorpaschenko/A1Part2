@@ -1,189 +1,193 @@
-#include <stdlib.h>
-#include <stdio.h>
+// lang::Cpp
+#include <assert.h>
+#include <iostream>
 #include "object.h"
 #include "string.h"
 #include "queue.h"
 
-/**
- * Program to test the functionality of the queue
- * @author: Conor Paschenko <paschenko.c@husky.neu.edu>, James Herbstritt <herbstritt.j@husky.neu.edu>
+/* Program to test methods with both Objects and Strings to
+ * ensure expected functionality.
+ *
+ * We added more tests to be more thorough. One major addition is testing 
+ * large Queues.
+ *
+ * authors: cella.c@husky.neu.edu and mooney.kyl@husky.neu.edu
  */
 
-// prints a fail message to stderr then exits the process
-void FAIL(const char* msg) {
-  fprintf(stderr, "failed: %s\n", msg);
-  exit(1);
+void OK(const char* m) { std::cout << m << "\n"; }
+
+void testEqualsAndHash() {
+    Queue* q1 = new Queue(); Queue* q2 = new Queue();
+    Object* o1 = new Object(); Object* o2 = new Object();
+    String* s1 = new String("Hello"); String* s2 = new String("World");
+
+    /** Ensure empty Queues are equivalent: */
+    assert(q1->equals(q2));
+    assert(q1->hash() == q2->hash());
+
+    /** Ensure non-empty Queue and empty Queues are not equivalent: */
+    q1->queue_push(s1);
+    assert(not q1->equals(q2));
+    assert(q1->hash() != q2->hash());
+
+    /** Ensure Queues are equal after equivalent pushes of identical 
+     *  elements: */
+    q1->queue_push(s2);
+    q2->queue_push(s1); 
+    q2->queue_push(s2);
+    assert(q1->equals(q2));
+    assert(q1->hash() == q2->hash());
+
+    /** Ensure differently indexed Queues register as equivalent: */
+    q1->queue_pop(); 
+    q1->queue_pop();
+    q1->queue_push(s1);
+    q1->queue_push(s2);
+    assert(q1->equals(q2));
+    assert(q1->hash() == q1->hash());
+
+    /** Ensure that Queue with no "pop"s so far registers as equivalent to
+     *  a Queue with identically ordered elements, but with a front_ index
+     *  which is larger than its back_ index (the elements have wrapped): */
+    delete q1; delete q2; q1 = new Queue(); q2 = new Queue();
+    for (size_t i = 0; i < 8; i++) q1->queue_push(s1);
+    // The below will bring the front_ index up to 12 and the back_ index to 11
+    for (size_t i = 0; i < 12; i++) q2->queue_push(s2);
+    for (size_t i = 0; i < 12; i++) q2->queue_pop();
+    // Then make q2 meaningfully identical to q1 (same elements in same order):
+    for (size_t i = 0; i < 8; i++) q2->queue_push(s1);
+    assert(q1->equals(q2));
+    assert(q1->hash() == q2->hash());
+
+    /** Ensure Queues that are not equivalent do not register as such: */
+    delete q1; delete q2; q1 = new Queue(); q2 = new Queue();
+    q1->queue_push(s1);
+    q1->queue_push(s2);
+    q2->queue_push(s2);
+    q2->queue_push(s1);
+    assert(not q1->equals(q2));
+    assert(q1->hash() != q2->hash());
+
+    delete q1; delete q2; delete o1; delete o2; delete s1; delete s2;
+    OK("6 - equals() and hash()");
 }
 
-// prints a success message to stdout
-void OK(const char* msg) {
-  printf("success: %s\n", msg);
+void testEmpty() {
+    Queue* q1 = new Queue(); Queue* q2 = new Queue();
+    Object* o1 = new Object(); Object* o2 = new Object();
+    String* s1 = new String("Hello"); String* s2 = new String("World");
+
+    /** Ensure a Queue is empty: */
+    assert(q1->queue_empty());
+
+    /** Ensure a non-empty Queue is not empty: */
+    q1->queue_push(s1);
+    assert(not q1->queue_empty());
+
+    delete q1; delete q2; delete o1; delete o2; delete s1; delete s2;
+    OK("5 - queue_empty()");
 }
 
-// fails the process if a given boolean expression p is false, continues otherwise
-void t_true(bool p, const char* msg) {
-  if (!p) FAIL(msg); 
+void testGetSize() {
+    Queue* q1 = new Queue(); Queue* q2 = new Queue();
+    Object* o1 = new Object(); Object* o2 = new Object();
+    String* s1 = new String("Hello"); String* s2 = new String("World");
+
+    /** Check the size of an empty Queue: */
+    assert(q1->getSize() == 0);
+
+    /** Add 1 element, check if size is 1: */
+    q1->queue_push(s1);
+    assert(q1->getSize() == 1);
+
+    /** Push 40 elements, check if size is 40: */
+    for (size_t i = 0; i < 40; i++) q2->queue_push(s2);
+    assert(q2->getSize() == 40);
+
+    delete q1; delete q2; delete o1; delete o2; delete s1; delete s2;
+    OK("4 - getSize()");
 }
 
-// two Queue's are equal when they have the same elements in the same order 
-void equal_test() {
-  String* s1 = new String("String one");
-  Object* o2 = new Object();
-  Queue* q1 = new Queue();
-  Queue* q2 = new Queue();
-  t_true(q1->equals(q2), "empty queues are equal");
-  q1->queue_push(s1);
-  t_true(!q1->equals(q2), "q1 and q2 are not equal");
-  q2->queue_push(s1);
-  t_true(q1->equals(q2), "q1 is equal to q2");
-  q1->queue_push(o2);
-  q1->queue_push(s1);
-  q1->queue_push(s1);
-  q2->queue_push(o2);
-  q2->queue_push(s1);
-  t_true(!q1->equals(q2), "q1 should not equal q2");
+void testPop() {
+    Queue* q1 = new Queue(); Queue* q2 = new Queue();
+    Object* o1 = new Object(); Object* o2 = new Object();
+    String* s1 = new String("Hello"); String* s2 = new String("World");
 
-  OK("equal");
+    /** Try to pop on empty: */
+    q1->queue_pop(); // does nothing
 
-  delete q1;
-  delete q2;
-  delete s1;
-  delete o2;
+    /** Try to pop from a populated Queue until the Queue is empty: */
+    q1->queue_push(o1);
+    q1->queue_push(s2);
+    assert(q1->getSize() == 2);
+    q1->queue_pop();
+    q1->queue_pop();
+    assert(q1->getSize() == 0);
+
+    /** Pop until resize down: */
+    for (size_t i = 0; i < 16; i++) q2->queue_push(s1);
+    for (size_t i = 0; i < 8; i++) q2->queue_push(s2);
+    for (size_t i = 0; i < 15; i++) q2->queue_pop();
+    assert(q2->frontElement()->equals(s1));
+    assert(q2->getSize() == 9);
+    q2->queue_pop();
+    assert(q2->frontElement()->equals(s2));
+
+    delete q1; delete q2; delete o1; delete o2; delete s1; delete s2;
+    OK("3 - queue_pop()");
 }
 
-// checks if hashes are same which implies the two are equal
-void queue_hashes() {
-  String* s1 = new String("hash");
-  String* s2 = new String("hash");
-  Queue* q1 = new Queue();
-  Queue* q2 = new Queue();
-  q1->queue_push(s1);
-  q2->queue_push(s2);
-  t_true(q1->equals(q2), "q1 equals q2");
-  t_true(q1->hash() == q2->hash(), "queues have the same hash and are therefore equal");
+void testFrontElement() {
+    Queue* q1 = new Queue(); Queue* q2 = new Queue();
+    Object* o1 = new Object(); Object* o2 = new Object();
+    String* s1 = new String("Hello"); String* s2 = new String("World");
+    
+    /** Trying to peek from an empty Queue: */
+    q1->frontElement();
 
-  OK("queue hashes");
+    /** Peeking at an Object: */
+    q1->queue_push(o1);
+    assert(q1->frontElement()->equals(o1));
 
-  delete q1;
-  delete q2;
-  delete s1;
-  delete s2;
+    /** Peeking at a String after pops: */
+    q1->queue_push(s1);
+    q1->queue_push(s2);
+    q1->queue_pop();
+    assert(q1->frontElement()->equals(s1));
+
+    delete q1; delete q2; delete o1; delete o2; delete s1; delete s2;
+    OK("2 - frontElement()");
 }
 
-// size increases as elements are pushed
-void queue_push_increase_size() {
-  Object* o1 = new Object();
-  Object* o2 = new Object();
-  Queue* q1 = new Queue();
-  t_true(q1->getSize() == 0, "initial size is 0");
-  q1->queue_push(o1);
-  t_true(q1->getSize() == 1, "size increases to 1");
-  q1->queue_push(o1);
-  q1->queue_push(o1);
-  q1->queue_push(o1);
-  t_true(q1->getSize() == 4, "size increases to 4");
+void testPush() {
+    Queue* q1 = new Queue(); Queue* q2 = new Queue();
+    Object* o1 = new Object(); Object* o2 = new Object();
+    String* s1 = new String("Hello"); String* s2 = new String("World");
+    
+    /** Adding 1 element to an empty Queue: */
+    assert(q1->getSize() == 0);
+    q1->queue_push(o1);
+    assert(q1->getSize() == 1);
 
-  OK("size increases correctly");
+    /** Testing adding to a non-empty Queue: */
+    q1->queue_push(s1);
+    assert(q1->getSize() == 2);
+    assert(q1->frontElement()->equals(o1));
 
-  delete q1;
-  delete o1;
-  delete o2;
+    /** Testing adding until resize: */
+    for (size_t i = 0; i < 17; i++) q2->queue_push(s1);
+    assert(q2->getSize() == 17);
+    
+    delete q1; delete q2; delete o1; delete o2; delete s1; delete s2;
+    OK("1 - queue_push()");
 }
 
-// size decreases as elements are popped
-void queue_pop_decrease_size() {
-  Object* o1 = new Object();
-  Object* o2 = new Object();
-  Queue* q1 = new Queue();
-  q1->queue_push(o1);
-  q1->queue_push(o2);
-  q1->queue_push(o2);
-  q1->queue_push(o1);
-  q1->queue_push(o1);
-  t_true(q1->getSize() == 5, "size is 5");
-  q1->queue_pop();
-  t_true(q1->getSize() == 4, "size decreases to 4");
-  q1->queue_pop();
-  q1->queue_pop();
-  t_true(q1->getSize() == 2, "size decreases to 2");
-  
-  q1->queue_pop();
-  q1->queue_pop();
-  q1->queue_pop();
-  q1->queue_pop();
-  t_true(q1->getSize() == 0, "size remains at 0");
-
-  OK("size decreases correctly");
-
-  delete q1;
-  delete o1;
-  delete o2;
-}
-
-// correct elements are popped
-void queue_pop() {
-  String* s1 = new String("one");
-  String* s2 = new String("two");
-  String* s3 = new String("three");
-  Queue* q1 = new Queue();
-  q1->queue_push(s1);
-  q1->queue_push(s2);
-  q1->queue_push(s3);
-  t_true(s1->equals(q1->queue_pop()), "s1 should be popped");
-  t_true(s2->equals(q1->queue_pop()), "s2 should be popped");
-  t_true(s3->equals(q1->queue_pop()), "s3 should be popped");
-
-  OK("pop works correctly");
-
-  delete q1;
-  delete s1;
-  delete s2;
-  delete s3;
-}
-
-// peeking returns the Queue's top element but does not remove it
-void queue_frontElement() {
-  String* s1 = new String("first");
-  String* s2 = new String("second");
-  Queue* q1 = new Queue();
-  q1->queue_push(s1);
-  q1->queue_push(s2);
-  t_true(q1->getSize() == 2, "size is 2 before the peek");
-  t_true(s1->equals(q1->frontElement()), "s1 is the top element");
-  t_true(q1->getSize() == 2, "size is 2 after the peek");
-
-  OK("queue peek");
-
-  delete q1;
-  delete s1;
-  delete s2;
-}
-
-// popping or peeking an empty Queue should return a nullptr
-void queue_pop_peek_empty() {
-  String* s1 = new String("dummy");
-  Queue* q1 = new Queue();
-  q1->queue_push(s1);
-  t_true(s1->equals(q1->queue_pop()), "popping once returns s1");
-  t_true(q1->queue_empty(), "queue should now be empty");
-  t_true(q1->queue_pop() == nullptr, "popping twice returns nullptr");
-  t_true(q1->frontElement() == nullptr, "peeking return nullptr");
-
-  OK("queue pop peek empty");
-
-  delete q1;
-  delete s1;
-}
-
-
-// runs the tests
-int main() {
-  equal_test();
-  queue_hashes();
-  queue_push_increase_size();
-  queue_pop_decrease_size();
-  queue_pop();
-  queue_frontElement();
-  queue_pop_peek_empty();
-  return 0;
+int main(int argc, char** argv) {
+    testPush();
+    testFrontElement();
+    testPop();
+    testGetSize();
+    testEmpty();
+    testEqualsAndHash();
+    return 0; 
 }
