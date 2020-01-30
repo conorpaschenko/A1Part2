@@ -31,7 +31,7 @@ void equal_test() {
   Object* o2 = new Object();
   Queue* q1 = new Queue();
   Queue* q2 = new Queue();
-  t_true(q1->equals(q2), "empty queues are equal")
+  t_true(q1->equals(q2), "empty queues are equal");
   q1->queue_push(s1);
   t_true(!q1->equals(q2), "q1 and q2 are not equal");
   q2->queue_push(s1);
@@ -107,16 +107,17 @@ void queue_pop_decrease_size() {
   q1->queue_pop();
   t_true(q1->getSize() == 2, "size decreases to 2");
   
-  q->queue_pop();
-  q->queue_pop();
-  q->queue_pop();
-  q->queue_pop();
+  q1->queue_pop();
+  q1->queue_pop();
+  q1->queue_pop();
+  q1->queue_pop();
   t_true(q1->getSize() == 0, "size remains at 0");
 
   OK("size decreases correctly");
 
   delete q1;
   delete o1;
+  delete o2;
 }
 
 // correct elements are popped
