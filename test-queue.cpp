@@ -16,7 +16,7 @@
 
 void OK(const char* m) { std::cout << m << "\n"; }
 
-void testEqualsAndHash() {
+void test_equals_and_hash() {
     Queue* q1 = new Queue(); Queue* q2 = new Queue();
     Object* o1 = new Object(); Object* o2 = new Object();
     String* s1 = new String("Hello"); String* s2 = new String("World");
@@ -70,7 +70,7 @@ void testEqualsAndHash() {
     OK("6 - equals() and hash()");
 }
 
-void testEmpty() {
+void test_empty() {
     Queue* q1 = new Queue(); Queue* q2 = new Queue();
     Object* o1 = new Object(); Object* o2 = new Object();
     String* s1 = new String("Hello"); String* s2 = new String("World");
@@ -86,7 +86,7 @@ void testEmpty() {
     OK("5 - is_empty()");
 }
 
-void testGetSize() {
+void test_size() {
     Queue* q1 = new Queue(); Queue* q2 = new Queue();
     Object* o1 = new Object(); Object* o2 = new Object();
     String* s1 = new String("Hello"); String* s2 = new String("World");
@@ -106,7 +106,7 @@ void testGetSize() {
     OK("4 - size()");
 }
 
-void testPop() {
+void test_pop() {
     Queue* q1 = new Queue(); Queue* q2 = new Queue();
     Object* o1 = new Object(); Object* o2 = new Object();
     String* s1 = new String("Hello"); String* s2 = new String("World");
@@ -135,7 +135,7 @@ void testPop() {
     OK("3 - pop()");
 }
 
-void testFrontElement() {
+void test_front_element() {
     Queue* q1 = new Queue(); Queue* q2 = new Queue();
     Object* o1 = new Object(); Object* o2 = new Object();
     String* s1 = new String("Hello"); String* s2 = new String("World");
@@ -157,7 +157,7 @@ void testFrontElement() {
     OK("2 - front_element()");
 }
 
-void testPush() {
+void test_push() {
     Queue* q1 = new Queue(); Queue* q2 = new Queue();
     Object* o1 = new Object(); Object* o2 = new Object();
     String* s1 = new String("Hello"); String* s2 = new String("World");
@@ -181,11 +181,11 @@ void testPush() {
 }
 
 int main(int argc, char** argv) {
-    testPush();
-    testFrontElement();
-    testPop();
-    testGetSize();
-    testEmpty();
-    testEqualsAndHash();
+    test_push();
+    test_front_element();
+    test_pop();
+    test_size();
+    test_empty();
+    test_equals_and_hash();
     return 0; 
 }
