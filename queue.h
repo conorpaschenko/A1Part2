@@ -10,36 +10,36 @@ class Queue: public Object {
 	}
 	
 	// checks if queue has 0 elements
-	virtual bool queue_empty() {
+	virtual bool is_empty() {
 	 
 	}
 
 	// returns front element of queue
-	virtual Object* frontElement() {
+	virtual Object* front_element() {
 	
 	}
 	
 	// returns queue size
-	virtual size_t getSize() {
+	virtual size_t size() {
 	   
 	}
 	
-	// adds element to back of queue if queue is not full. Increments back. 
-	virtual void queue_push(Object* element) {
+	// adds element to back of queue. 
+	virtual void push(Object* element) {
 	  
 	}
 	
 	// removes front element of queue. Shifts remaining elements down a spot and returns popped element	
-	virtual Object* queue_pop() {
+	virtual Object* pop() {
 	 
 	}
 	
 	//get the hash for the Queue
-        virtual size_t hash() {}
+    virtual size_t hash() {}
 	
 
-       //compare hashes to see if Queues are the same
-        virtual bool equals(Object* queue) {}
+    //compare queue objects to see if they are the same
+    virtual bool equals(Object* queue) {}
    
 	virtual ~Queue() {
          
