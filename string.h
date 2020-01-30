@@ -1,43 +1,49 @@
+//lang::CwC
 #pragma once
-#include<stdio.h>
 
 #include "object.h"
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
+#include <cstdio> 
 
+/**
+ * An immutable String class representing a char*
+ * author: chasebish */
 class String : public Object {
-    public:
-        const char* _value;
+public:
+  /** CONSTRUCTORS & DESTRUCTORS **/
 
-        //string constructor with specified value
-        String(const char* v) : Object("string") {
-           this->_value = this->_strdup(v); 
-        }
+  /* Creates a String copying s */
+  String(const char* s);
 
-        //return length of string
-        int length() {
-            return strlen(this->_value);
-        }
+  /* Copies a String copying the value from s */
+  String(String* const s);
 
-        //return string value
-        const char* get_value() {
-            return this->_value; 
-        }
+  /* Clears String from memory */
+  ~String();
 
-        //string equals; return true if strings are equal, else return false
-        bool streq(String* s1, String* s2) {
-            return !strcmp(s1->get_value(), s2->get_value());
-        }
 
-        //append s1 onto end of this string
-        String* concat(String* s1) {
-            printf("%d %d %d\n", this->length(), s1->length(), 1);
-            char temp[this->length() + s1->length() + 1];
-            strcat(temp, this->get_value());
-            strcat(temp, s1->get_value());
-            return new String(temp);
-        }
+  /** INHERITED METHODS **/
 
-        ~String() {
-            delete this->_value;
-        }
+  /* Inherited from Object, generates a hash for a String */
+  size_t hash();
+
+  /* Inherited from Object, checks equality between an String and an Object */
+  bool equals(Object* const obj);
+
+
+  /** STRING METHODS **/
+  
+  /** Compares strings based on alphabetical order
+   * < 0 -> this String is less than String s
+   * = 0 -> this String is equal to String s
+   * > 0 -> this String is greater than String s
+   */
+  int cmp(String* const s);
+
+  /* Creates a new String by combining two existing Strings */
+  String* concat(String* const s);
+
+  /* Returns the current length of the String */
+  size_t size();
 };
