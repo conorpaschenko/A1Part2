@@ -27,7 +27,7 @@ void test_equals_and_hash() {
 
     /** Ensure non-empty Queue and empty Queues are not equivalent: */
     q1->push(s1);
-    assert(not q1->equals(q2));
+    assert(!q1->equals(q2));
     assert(q1->hash() != q2->hash());
 
     /** Ensure Queues are equal after equivalent pushes of identical 
@@ -63,7 +63,7 @@ void test_equals_and_hash() {
     q1->push(s2);
     q2->push(s2);
     q2->push(s1);
-    assert(not q1->equals(q2));
+    assert(!q1->equals(q2));
     assert(q1->hash() != q2->hash());
 
     delete q1; delete q2; delete o1; delete o2; delete s1; delete s2;
@@ -80,7 +80,7 @@ void test_empty() {
 
     /** Ensure a non-empty Queue is not empty: */
     q1->push(s1);
-    assert(not q1->is_empty());
+    assert(!q1->is_empty());
 
     delete q1; delete q2; delete o1; delete o2; delete s1; delete s2;
     OK("5 - is_empty()");
