@@ -1,4 +1,4 @@
-// lang::Cpp
+// lang::CwC
 #include <assert.h>
 #include <iostream>
 #include "object.h"
@@ -7,11 +7,7 @@
 
 /* Program to test methods (with their updated names) with both Objects 
  * and Strings to ensure expected functionality.
- *
- * We added more tests to be more thorough. One major addition is testing 
- * large Queues.
- *
- * authors: cella.c@husky.neu.edu and mooney.kyl@husky.neu.edu
+ * authors: paschenko.c@husky.neu.edu and herbstritt.j@husky.neu.edu
  */
 
 void OK(const char* m) { std::cout << m << "\n"; }
