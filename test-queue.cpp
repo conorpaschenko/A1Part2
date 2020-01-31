@@ -63,7 +63,6 @@ void test_equals_and_hash() {
     q2->push(s2);
     q2->push(s1);
     assert(!q1->equals(q2));
-    assert(q1->hash() != q2->hash());
 
     delete q1; delete q2; delete o1; delete o2; delete s1; delete s2;
     OK("6 - equals() and hash()");
