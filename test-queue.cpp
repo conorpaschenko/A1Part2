@@ -28,7 +28,6 @@ void test_equals_and_hash() {
     /** Ensure non-empty Queue and empty Queues are not equivalent: */
     q1->push(s1);
     assert(!q1->equals(q2));
-    assert(q1->hash() != q2->hash());
 
     /** Ensure Queues are equal after equivalent pushes of identical 
      *  elements: */
